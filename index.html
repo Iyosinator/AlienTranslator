@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Alien Language</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6e6;
+            color: #4b0082;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /*Gradient Bcakground*/
+            background: linear-gradient(90deg, rgba(255, 230, 230, 1) 0%, rgba(255, 204, 204, 1) 50%, rgba(255, 179, 179, 1) 100%);
+        }
+
+        header {
+            background: linear-gradient(90deg, rgba(255, 230, 230, 1) 0%, rgba(255, 204, 204, 1) 50%, rgba(255, 179, 179, 1) 100%);
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        textarea,
+        button {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ff99cc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #ff66b2;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff3385;
+        }
+
+        .about {
+            margin-top: 20px;
+        }
+
+        .about p {
+            font-size: 1.2em;
+            color: #ff3399;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        Alien Language Translator
+    </header>
+    <main>
+        <div class="container">
+            <textarea id="textInput" rows="4" placeholder="Enter text here..."></textarea>
+            <button id="translateButton" onclick="translateText()">Translate</button>
+            <textarea id="textOutput" rows="4" readonly placeholder="Translation will appear here..."></textarea>
+            <div class="about">
+                <h3>About Us</h3>
+                <p>I found a girl through a dating match bot and made this website for her to understand my language.
+                    This is our special language. <br/>
+                    Made with ❤️ for
+                    <a href="https://t.me/Ch17q"
+                        target="_blank">Moon Mio</a></p>
+            </div>
+        </div>
+    </main>
+    <script>
+        const alienDict = {
+            'A': '!', 'B': '@', 'C': '#', 'D': '$', 'E': '%', 'F': '^', 'G': '&', 'H': '*', 'I': '(', 'J': ')', 'K': '_', 'L': '+',
+            'M': '{', 'N': '}', 'O': '[', 'P': ']', 'Q': '|', 'R': ';', 'S': ':', 'T': "'", 'U': '"', 'V': '<', 'W': '>', 'X': ',',
+            'Y': '.', 'Z': '?',
+            'a': '!', 'b': '@', 'c': '#', 'd': '$', 'e': '%', 'f': '^', 'g': '&', 'h': '*', 'i': '(', 'j': ')', 'k': '_', 'l': '+',
+            'm': '{', 'n': '}', 'o': '[', 'p': ']', 'q': '|', 'r': ';', 's': ':', 't': "'", 'u': '"', 'v': '<', 'w': '>', 'x': ',',
+            'y': '.', 'z': '?'
+        };
+
+        let translatingToAlien = true;
+
+        function translateText() {
+            const text = document.getElementById('textInput').value;
+            if (translatingToAlien) {
+                document.getElementById('textOutput').value = translateToAlien(text);
+            } else {
+                document.getElementById('textOutput').value = translateToEnglish(text);
+            }
+        }
+
+        function translateToAlien(text) {
+            const words = text.split(' ');
+            let alienWords = [];
+            for (let word of words) {
+                let alienWord = "Zor-";
+                for (let letter of word) {
+                    let alienLetter = alienDict[letter] || letter;
+                    if (!'aeiouAEIOU'.includes(letter)) {
+                        alienLetter += alienLetter;
+                    }
+                    alienWord += alienLetter;
+                }
+                alienWord += "nak";
+                alienWords.push(alienWord);
+            }
+            return alienWords.join(' ');
+        }
+
+        function translateToEnglish(text) {
+            const words = text.split(' ');
+            let englishWords = [];
+            for (let word of words) {
+                if (word.startsWith('Zor-') && word.endsWith('nak')) {
+                    let alienWord = word.slice(4, -3);
+                    let englishWord = '';
+                    for (let i = 0; i < alienWord.length; i++) {
+                        let letter = alienWord[i];
+                        if (i + 1 < alienWord.length && alienWord[i + 1] === letter) {
+                            i++;
+                        }
+                        englishWord += Object.keys(alienDict).find(key => alienDict[key] === letter) || letter;
+                    }
+                    englishWords.push(englishWord);
+                }
+            }
+            return englishWords.join(' ');
+        }
+
+        document.getElementById('translateButton').addEventListener('click', () => {
+            translatingToAlien = !translatingToAlien;
+            document.getElementById('translateButton').textContent = translatingToAlien ? "Translate to Alien" : "Translate to Human";
+        });
+    </script>
+</body>
+
+</html>
